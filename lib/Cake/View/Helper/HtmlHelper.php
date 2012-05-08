@@ -1106,6 +1106,10 @@ class HtmlHelper extends AppHelper {
 
 		$index = 1;
 		foreach ($items as $key => $item) {
+			if(is_array($item) && isset($item['text'])){
+				$_itemOptions = array_merge($itemOptions, $item['options']);
+				$item = $item['text'];
+		    	}
 			if (is_array($item)) {
 				$item = $key . $this->nestedList($item, $options, $itemOptions, $tag);
 			}
@@ -1114,7 +1118,9 @@ class HtmlHelper extends AppHelper {
 			} elseif (isset($itemOptions['odd']) && $index % 2 != 0) {
 				$itemOptions['class'] = $itemOptions['odd'];
 			}
-			$out .= sprintf($this->_tags['li'], $this->_parseAttributes($itemOptions, array('even', 'odd'), ' ', ''), $item);
+			if(isset($_itemOptions['class']) && isset($itemOptions['class']))
+			  $_itemOptions['class'] = $itemOptions['class'] . ' ' . $_itemOptions['class'];
+			$out .= sprintf($this->_tags['li'], $this->_parseAttributes((!empty($_itemOptions) ? $_itemOptions : $itemOptions), array('even', 'odd'), ' ', ''), $item);
 			$index++;
 		}
 		return $out;
