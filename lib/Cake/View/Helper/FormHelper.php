@@ -353,7 +353,7 @@ class FormHelper extends AppHelper {
 		}
 
 		$options = array_merge(array(
-			'type' => ($created && empty($options['action'])) ? 'put' : 'post',
+			'type' => ($created && (empty($options['action']) || empty($options['url']))) ? 'put' : 'post',
 			'action' => null,
 			'url' => null,
 			'default' => true,
